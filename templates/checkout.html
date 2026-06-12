@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div style="max-width: 600px; margin: 40px auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f1eae1;">
+    <h2 style="color: #3d2314; margin-bottom: 5px; font-weight: 800;">Finalizar Pedido</h2>
+    <p style="color: #7a6355; font-size: 14px; margin-bottom: 30px;">Escolha como deseja receber e pagar seus chocolates.</p>
+
+    <form action="/checkout" method="POST">
+        
+        <div style="margin-bottom: 30px;">
+            <h3 style="color: #3d2314; font-size: 16px; border-bottom: 2px solid #f5e6d3; padding-bottom: 8px; margin-bottom: 15px; font-weight: 700;">1. Forma de Entrega</h3>
+            
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; font-size: 15px; color: #3d2314;">
+                <input type="radio" name="tipo_entrega" value="retirada" checked onclick="document.getElementById('campo-endereco').style.display='none'" style="accent-color: #3d2314;">
+                🏪 Retirar na Loja (Grátis)
+            </label>
+            
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; color: #3d2314;">
+                <input type="radio" name="tipo_entrega" value="delivery" onclick="document.getElementById('campo-endereco').style.display='block'" style="accent-color: #3d2314;">
+                🛵 Receber por Delivery
+            </label>
+
+            <div id="campo-endereco" style="display: none; margin-top: 15px;">
+                <label style="display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #7a6355;">Endereço Completo de Entrega:</label>
+                <input type="text" name="endereco" placeholder="Rua, Número, Bairro e Cidade" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 35px;">
+            <h3 style="color: #3d2314; font-size: 16px; border-bottom: 2px solid #f5e6d3; padding-bottom: 8px; margin-bottom: 15px; font-weight: 700;">2. Forma de Pagamento</h3>
+            
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; font-size: 15px; color: #3d2314;">
+                <input type="radio" name="forma_pagamento" value="Pix" checked style="accent-color: #3d2314;">
+                📱 Pagar com PIX
+            </label>
+            
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; color: #3d2314;">
+                <input type="radio" name="forma_pagamento" value="Cartão" style="accent-color: #3d2314;">
+                💳 Pagar com Cartão (Na Entrega/Retirada)
+            </label>
+        </div>
+
+        <div style="background: #fcf8f2; padding: 20px; border-radius: 12px; border: 1px solid #ebdccb; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #3d2314; font-weight: 700; font-size: 16px;">Total do seu pedido:</span>
+            <span style="color: #3d2314; font-weight: 800; font-size: 24px;">R$ {{ "%.2f"|format(total) }}</span>
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #27ae60; color: white; padding: 16px; border: none; border-radius: 25px; font-weight: 700; font-size: 16px; cursor: pointer; text-align: center; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.2);">
+            ✅ Confirmar e Concluir Pedido
+        </button>
+    </form>
+</div>
+{% endblock %}

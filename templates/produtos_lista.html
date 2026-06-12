@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choco Flow - Catálogo</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fdfbf7; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid #eee; margin-bottom: 30px; }
+        .header h1 { margin: 0; color: #3e2723; }
+        .nav-buttons a, .nav-buttons form { display: inline-block; margin-left: 10px; }
+        .search-box { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .btn { display: inline-block; padding: 10px 15px; text-decoration: none; color: white; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-nav { background-color: #3e2723; }
+        .btn-cart { background-color: #27ae60; text-align: center; }
+        .btn-add { background-color: #f39c12; text-align: center; }
+        .btn-edit { background-color: #f39c12; }
+        .btn-delete { background-color: #e74c3c; }
+        .btn-move { background-color: #7f8c8d; }
+        .btn-out { background-color: #bdc3c7; color: #7f8c8d; text-align: center; width: 100%; cursor: not-allowed; }
+        
+        .section-title { color: #3e2723; border-left: 4px solid #d35400; padding-left: 10px; margin-top: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: all 0.3s ease; }
+        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 5px; margin-bottom: 15px; }
+        .card h3 { margin: 0 0 10px 0; font-size: 18px; }
+        .card p { margin: 0; color: #d35400; font-size: 18px; font-weight: bold; flex-grow: 1; }
+        .stock-badge { font-size: 12px; color: #7f8c8d; font-weight: normal; float: right; }
+        
+        .client-controls { display: flex; justify-content: space-between; margin-top: 15px; }
+        .client-controls .btn { width: 48%; box-sizing: border-box; padding: 10px 0; font-size: 14px; }
+        
+        .admin-controls { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; }
+        .btn-group { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .btn-group .btn { width: 48%; box-sizing: border-box; text-align: center; padding: 8px 0; font-size: 14px; }
+        
+        .admin-panel { background: #ecf0f1; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3498db; }
+        .flash-message { background: #f1c40f; padding: 15px; border-radius: 5px; text-align: center; margin-bottom: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>🍫 Choco Flow</h1>
+            <div class="nav-buttons">
+                <form action="/buscar" method="get">
+                    <input type="text" name="termo" class="search-box" placeholder="Buscar chocolate..." required>
+                    <button type="submit" class="btn btn-nav">🔍</button>
+                </form>
+                <a href="/carrinho" class="btn btn-nav">🛒 Carrinho</a>
+                
+                {% if session.get('logado') %}
+                    <a href="/logout" class="btn btn-delete">Sair (Admin)</a>
+                {% elif session.get('cliente_id') %}
+                    <span>Olá, {{ session.get('cliente_nome') }}</span>
+                    <a href="/logout_cliente" class="btn btn-delete">Sair</a>
+                {% else %}
+                    <a href="/login_cliente" class="btn btn-nav">Entrar</a>
+                    <a href="/login" class="btn" style="background:#bdc3c7;">Admin</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if session.get('logado') %}
+        <div class="admin-panel">
+            <h3 style="margin-top: 0;">⚙️ Painel de Administração</h3>
+            <a href="/novo" class="btn btn-nav">➕ Cadastrar Chocolate</a>
+            <a href="/nova_colecao" class="btn btn-nav">➕ Cadastrar Coleção</a>
+        </div>
+        {% endif %}
+
+        <h2 class="section-title">Nossos Chocolates</h2>
+        <div class="grid">
+            {% for produto in produtos %}
+            <div class="card">
+                <a href="/produto/{{ produto.id }}">
+                    <img src="{{ produto.imagem_url or 'https://images.unsplash.com/photo-1548907040-4d42b52145ca?w=500' }}" alt="{{ produto.nome }}">
+                </a>
+                <h3>{{ produto.nome }}</h3>
+                <p>R$ {{ "%.2f"|format(produto.preco) }} 
+                    <span class="stock-badge">Qtd: {{ produto.estoque }}</span>
+                </p>
+                
+                <div class="client-controls">
+                    {% if produto.estoque > 0 %}
+                        <a href="/adicionar_carrinho/produto/{{ produto.id }}?acao=adicionar" class="btn btn-add">🛒 Add</a>
+                        <a href="/adicionar_carrinho/produto/{{ produto.id }}?acao=comprar" class="btn btn-cart">💳 Comprar</a>
+                    {% else %}
+                        <button class="btn btn-out" disabled style="width:100%">❌ Esgotado</button>
+                    {% endif %}
+                </div>
+                
+                {% if session.get('logado') %}
+                <div class="admin-controls">
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" onclick="moverItemNoFundo(this, 'produto', {{ produto.id }}, 'esquerda')" class="btn btn-move">◀ Esq.</a>
+                        <a href="javascript:void(0);" onclick="moverItemNoFundo(this, 'produto', {{ produto.id }}, 'direita')" class="btn btn-move">Dir. ▶</a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="/editar/{{ produto.id }}" class="btn btn-edit">✏️ Editar</a>
+                        <a href="/deletar/{{ produto.id }}" class="btn btn-delete" onclick="return confirm('Excluir este chocolate?');">🗑️ Excluir</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <p>Nenhum chocolate cadastrado no momento.</p>
+            {% endfor %}
+        </div>
+
+        <h2 class="section-title">Coleções Especiais</h2>
+        <div class="grid">
+            {% for colecao in colecoes %}
+            <div class="card">
+                <a href="/colecao/{{ colecao.id }}">
+                    <img src="{{ colecao.imagem_url or 'https://images.unsplash.com/photo-1548907040-4d42b52145ca?w=500' }}" alt="{{ colecao.nome }}">
+                </a>
+                <h3>{{ colecao.nome }}</h3>
+                <p>R$ {{ "%.2f"|format(colecao.preco) }}
+                    <span class="stock-badge">Qtd: {{ colecao.estoque }}</span>
+                </p>
+                
+                <div class="client-controls">
+                    {% if colecao.estoque > 0 %}
+                        <a href="/adicionar_carrinho/colecao/{{ colecao.id }}?acao=adicionar" class="btn btn-add">🛒 Add</a>
+                        <a href="/adicionar_carrinho/colecao/{{ colecao.id }}?acao=comprar" class="btn btn-cart">💳 Comprar</a>
+                    {% else %}
+                        <button class="btn btn-out" disabled style="width:100%">❌ Esgotado</button>
+                    {% endif %}
+                </div>
+                
+                {% if session.get('logado') %}
+                <div class="admin-controls">
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" onclick="moverItemNoFundo(this, 'colecao', {{ colecao.id }}, 'esquerda')" class="btn btn-move">◀ Esq.</a>
+                        <a href="javascript:void(0);" onclick="moverItemNoFundo(this, 'colecao', {{ colecao.id }}, 'direita')" class="btn btn-move">Dir. ▶</a>
+                    </div>
+                    <div class="btn-group">
+                        <a href="/editar_colecao/{{ colecao.id }}" class="btn btn-edit">✏️ Editar</a>
+                        <a href="/deletar_colecao/{{ colecao.id }}" class="btn btn-delete" onclick="return confirm('Excluir esta coleção?');">🗑️ Excluir</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <p>Nenhuma coleção cadastrada no momento.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script>
+    function moverItemNoFundo(botao, tipo, id, direcao) {
+        // Encontra o bloco do chocolate (o card completo)
+        const card = botao.closest('.card');
+        if (!card) return;
+
+        // Avisa o servidor em segundo plano para mudar a ordem no banco de dados
+        fetch(`/mover_${tipo}/${id}/${direcao}`)
+            .then(response => response.json())
+            .then(data => {
+                // Se deu certo no banco de dados, movemos o bloco na tela visualmente
+                if (data.sucesso && data.moveu) {
+                    if (direcao === 'esquerda') {
+                        const vizinhoEsquerda = card.previousElementSibling;
+                        if (vizinhoEsquerda && vizinhoEsquerda.classList.contains('card')) {
+                            card.parentNode.insertBefore(card, vizinhoEsquerda);
+                        }
+                    } else if (direcao === 'direita') {
+                        const vizinhoDireita = card.nextElementSibling;
+                        if (vizinhoDireita && vizinhoDireita.classList.contains('card')) {
+                            card.parentNode.insertBefore(vizinhoDireita, card);
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error('Erro ao mover item:', error));
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChocoFlow - O Sabor da Felicidade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #fcf8f2; color: #3d2314; }
+        .navbar { background-color: #3d2314; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .logo { color: #f5e6d3; text-decoration: none; font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: #dca777; }
+        .search-container { flex: 1; max-width: 500px; margin: 0 20px; }
+        .search-form { display: flex; width: 100%; }
+        .search-input { width: 100%; padding: 10px 20px; border: none; border-radius: 25px 0 0 25px; outline: none; font-size: 14px; background-color: #fff; }
+        .search-btn { padding: 10px 20px; background-color: #dca777; color: #3d2314; border: none; border-radius: 0 25px 25px 0; cursor: pointer; font-weight: 600; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-link { color: #f5e6d3; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .cart-btn { background-color: #8c6239; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
+        .cart-btn:hover { background-color: #dca777; color: #3d2314; }
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .alerta { padding: 15px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">🍫 Choco<span>Flow</span></a>
+        
+        <div class="search-container">
+            <form action="/buscar" method="GET" class="search-form">
+                <input type="text" name="termo" class="search-input" placeholder="Busque por chocolates..." required>
+                <button type="submit" class="search-btn">🔍</button>
+            </form>
+        </div>
+
+        <div class="nav-actions">
+            {% if session.get('logado') %}
+                <a href="/novo" class="nav-link">⚙️ Painel Admin</a>
+                <a href="/logout" class="nav-link" style="color: #e74c3c;">Sair</a>
+            {% else %}
+                <a href="/login" class="nav-link">👤 Entrar</a>
+            {% endif %}
+            
+            <a href="/carrinho" class="cart-btn">
+                🛒 <span>{{ session.get('carrinho', [])|length }} itens</span>
+            </a>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="main-content" style="padding-bottom: 0;">
+                {% for message in messages %}
+                    <div class="alerta">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block conteudo %}
+    {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div style="max-width: 500px; margin: 40px auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f1eae1;">
+    <h2 style="color: #3d2314; margin-bottom: 25px; text-align: center; font-weight: 700;">🎁 Cadastrar Novo Combo / Coleção</h2>
+    
+    <form action="/salvar_colecao" method="POST">
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 14px;">Nome do Combo / Coleção:</label>
+            <input type="text" name="nome" required placeholder="Ex: Combo Romântico de Inverno" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 14px;">Descrição Completa:</label>
+            <textarea name="descricao" required placeholder="Descreva os itens inclusos neste combo especial..." rows="4" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; resize: none;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 14px;">Preço Especial (R$):</label>
+            <input type="number" step="0.01" name="preco" required placeholder="89.90" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #3d2314; color: #f5e6d3; padding: 14px; border: none; border-radius: 25px; font-weight: 700; font-size: 16px; cursor: pointer;">✨ Criar Coleção</button>
+        <a href="/" style="display: block; text-align: center; margin-top: 15px; color: #7a6355; text-decoration: none; font-size: 14px;">Cancelar e Voltar</a>
+    </form>
+</div>
+{% endblock %}

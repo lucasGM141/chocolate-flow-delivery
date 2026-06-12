@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div style="max-width: 400px; margin: 60px auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f1eae1;">
+    <h2 style="color: #3d2314; margin-bottom: 10px; text-align: center; font-weight: 700;">Criar sua Conta</h2>
+    <p style="color: #7a6355; text-align: center; font-size: 14px; margin-bottom: 30px;">Faça seu cadastro para gerenciar seus pedidos e comprar seus chocolates favoritos.</p>
+    
+    <form action="/cadastro" method="POST">
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 13px;">Seu Nome Completo:</label>
+            <input type="text" name="nome" required placeholder="Ex: Maria Silva" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 13px;">E-mail de Acesso:</label>
+            <input type="email" name="email" required placeholder="seuemail@exemplo.com" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <label style="display: block; margin-bottom: 8px; color: #3d2314; font-weight: 600; font-size: 13px;">Crie uma Senha Segura:</label>
+            <input type="password" name="senha" required placeholder="••••••••" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #3d2314; color: #f5e6d3; padding: 14px; border: none; border-radius: 25px; font-weight: 700; font-size: 15px; cursor: pointer;">✨ Concluir Cadastro</button>
+        
+        <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #7a6355;">
+            Já tem uma conta? <a href="/login_cliente" style="color: #dca777; font-weight: 600; text-decoration: none;">Entrar aqui</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

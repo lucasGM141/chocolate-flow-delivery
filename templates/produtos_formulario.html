@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+    <h1>🍫 Cadastrar Novo Chocolate</h1>
+    
+    <form action="/salvar" method="POST">
+        <p>
+            <label style="font-weight: bold;">Nome do Chocolate:</label><br>
+            <input type="text" name="nome" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+        </p>
+        
+        <p>
+            <label style="font-weight: bold;">Descrição:</label><br>
+            <textarea name="descricao" rows="3" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;"></textarea>
+        </p>
+        
+        <p>
+            <label style="font-weight: bold;">Preço (R$):</label><br>
+            <input type="number" name="preco" step="0.01" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+        </p>
+        
+        <button type="submit" class="btn-novo" style="width: 100%; border: none; cursor: pointer; font-size: 16px;">Salvar Chocolate</button>
+    </form>
+    
+    <br>
+    <a href="/" style="color: #5c3a21; text-decoration: none; font-weight: bold;">⬅️ Voltar para o Menu</a>
+{% endblock %}

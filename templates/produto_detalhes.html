@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.nome }} - Detalhes</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fdfbf7; padding: 40px; color: #333; }
+        .details-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; gap: 30px; }
+        .image-side { flex: 1; }
+        .image-side img { width: 100%; height: auto; border-radius: 8px; object-fit: cover; max-height: 400px; }
+        .info-side { flex: 1; display: flex; flex-direction: column; }
+        h2 { color: #3e2723; margin-top: 0; font-size: 28px; }
+        .price { color: #d35400; font-size: 24px; font-weight: bold; margin: 15px 0; }
+        .desc { color: #666; line-height: 1.6; flex-grow: 1; }
+        .stock { color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
+        .btn-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-actions .btn { flex: 1; padding: 12px; border-radius: 5px; font-weight: bold; text-decoration: none; text-align: center; border: none; cursor: pointer; color: white; }
+        .btn-add { background-color: #f39c12; }
+        .btn-cart { background-color: #27ae60; }
+        .btn-out { background-color: #bdc3c7; color: #7f8c8d; cursor: not-allowed; }
+        .btn-back { display: inline-block; margin-top: 20px; color: #3e2723; font-weight: bold; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="details-container">
+            <div class="image-side">
+                <img src="{{ item.imagem_url }}" alt="{{ item.nome }}">
+            </div>
+            <div class="info-side">
+                <h2>{{ item.nome }}</h2>
+                <div class="price">R$ {{ "%.2f"|format(item.preco) }}</div>
+                <div class="stock">Disponível em estoque: {{ item.estoque }} unidades</div>
+                <div class="desc">{{ item.descricao or "Sem descrição disponível para este item." }}</div>
+                
+                <div class="btn-actions">
+                    {% if item.estoque > 0 %}
+                        <a href="/adicionar_carrinho/{{ item.tipo }}/{{ item.id }}?acao=adicionar" class="btn btn-add">🛒 Adicionar ao Carrinho</a>
+                        <a href="/adicionar_carrinho/{{ item.tipo }}/{{ item.id }}?acao=comprar" class="btn btn-cart">💳 Comprar Agora</a>
+                    {% else %}
+                        <button class="btn btn-out" disabled style="width: 100%;">❌ Produto Esgotado</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <a href="/" class="btn-back">← Voltar para a Vitrine</a>
+    </div>
+</body>
+</html>
